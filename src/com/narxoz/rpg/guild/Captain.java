@@ -10,12 +10,25 @@ public class Captain extends GuildMember {
     }
 
     public void issueOrder(String topic, String payload) {
-        // TODO: send a command message through the mediator.
         getMediator().dispatch(topic, this, payload);
     }
 
     @Override
     public void receive(String topic, GuildMember from, String payload) {
-        // TODO: react to a guild-hall message without calling another colleague directly.
+        String sender = from == null ? "Unknown" : from.getName();
+
+        if (GuildHall.TOPIC_SCOUTING.equals(topic)) {
+            System.out.println("[Captain " + getName() + "] Received scouting update from "
+                    + sender + ": " + payload);
+        } else if (GuildHall.TOPIC_SUPPLIES.equals(topic)) {
+            System.out.println("[Captain " + getName() + "] Received supply update from "
+                    + sender + ": " + payload);
+        } else if (GuildHall.TOPIC_HEALING.equals(topic)) {
+            System.out.println("[Captain " + getName() + "] Received healing update from "
+                    + sender + ": " + payload);
+        } else {
+            System.out.println("[Captain " + getName() + "] Noted message from "
+                    + sender + ": " + payload);
+        }
     }
 }
